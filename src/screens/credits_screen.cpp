@@ -14,7 +14,7 @@ namespace Credits
 {
 	static const std::string TITLE = "Credits";
 	static const std::string LABEL = "Developed by:";
-	static const std::string AUTHOR = "Jonas Canaza";
+	static const std::string AUTHOR = "Jonas Canaza and Lucas Galli";
 
 	static const int FONT_SIZE_TITLE = 64;
 	static const int FONT_SIZE_TEXT = 32;
