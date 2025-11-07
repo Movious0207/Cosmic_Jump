@@ -1,3 +1,3 @@
 # Cosmic Jump
 
-### Developed by: Jonas Canaza
+### Developed by: Jonas Canaza and Lucas Galli
