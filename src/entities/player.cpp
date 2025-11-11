@@ -41,7 +41,7 @@ namespace Player
 	{
 		Player newPlayer = {};
 
-		newPlayer.rectangle.x = DEFAULT_X;
+		newPlayer.rectangle.x = DEFAULT_X - 50.0f;
 		newPlayer.rectangle.y = static_cast<float>(SCREEN_HEIGHT) / 2.0f - DEFAULT_WIDTH / 2.0f;
 		newPlayer.rectangle.width = DEFAULT_WIDTH;
 		newPlayer.rectangle.height = DEFAULT_HEIGHT;
@@ -55,7 +55,6 @@ namespace Player
 	void Reset(Player& player)
 	{
 		player.isActive = true;
-		player.rectangle.x = DEFAULT_X;
 		player.rectangle.y = static_cast<float>(SCREEN_HEIGHT) / 2.0f - DEFAULT_WIDTH / 2.0f;
 		player.speedY = 0.0f;
 	}

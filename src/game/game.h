@@ -6,6 +6,7 @@ namespace CosmicJump
 	{
 		MainMenu,
 		Gameplay,
+		Multiplayer,
 		Credits
 	};
 

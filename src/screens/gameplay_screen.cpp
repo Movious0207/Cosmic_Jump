@@ -29,6 +29,7 @@ namespace Gameplay
 	static const float BUTTON_MARGIN = 10.0f;
 
 	static const std::string TEXT_CONTROLS = "Controls: SPACE to jump";
+	static const std::string TEXT_MULTCONTROLS = "Controls: P1: SPACE to jump  P2: UP to Jump";
 	static const std::string TEXT_START_GAME = "Press SPACE to start the game";
 
 	static const int TUTORIAL_FONT_SIZE = 36;
@@ -49,9 +50,14 @@ namespace Gameplay
 
 	void Init()
 	{
+		static const float DEFAULT_X = 200.0f;
+
 		player = Player::Create();
 		player2 = Player::Create();
 		obstacle = Obstacle::Create();
+
+		player.rectangle.x = DEFAULT_X - 50.0f;
+		player2.rectangle.x = DEFAULT_X + 50.0f;
 
 		InitButton();
 
@@ -64,6 +70,8 @@ namespace Gameplay
 		if (IsKeyPressed(KEY_ESCAPE))
 		{
 			CosmicJump::currentScene = CosmicJump::Scenes::MainMenu;
+			Reset();
+			isGameStarted = false;
 		}
 
 		if (player.isActive)
@@ -83,27 +91,41 @@ namespace Gameplay
 		}
 		if (IsKeyPressed(KEY_SPACE) && !isGameStarted)
 		{
+			Reset();
 			isGameStarted = true;
 			Player::Jump(player);
+
+			if (CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
+			{
+				player2.isActive = true;
+				Player::Jump(player2);
+			}
+			else
+			{
+				player2.isActive = false;
+			}
 		}
 	}
 
 	void Update()
 	{
+
 		deltaTime = GetFrameTime();
 
 		if (isGameStarted)
 		{
 			Background::Update(deltaTime);
 
-			if (player.isActive)
+			if (CosmicJump::currentScene == CosmicJump::Scenes::Gameplay)
 			{
 				Player::Update(player, deltaTime);
 			}
-			if (player2.isActive)
+			else if (CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
 			{
+				Player::Update(player, deltaTime);
 				Player::Update(player2, deltaTime);
 			}
+
 			Obstacle::Update(obstacle, deltaTime);
 
 			HandleCollisionBetweenPlayerAndObstacle();
@@ -128,10 +150,18 @@ namespace Gameplay
 		{
 			Player::Draw(player2);
 		}
+
 		Obstacle::Draw(obstacle);
 
 		if (!isGameStarted)
 		{
+			Player::Draw(player);
+
+			if (CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
+			{
+				Player::Draw(player2);
+			}
+
 			DrawTutorial();
 		}
 
@@ -160,6 +190,8 @@ namespace Gameplay
 		if (button.clicked)
 		{
 			CosmicJump::currentScene = CosmicJump::Scenes::MainMenu;
+			Reset();
+			isGameStarted = false;
 		}
 	}
 
@@ -170,7 +202,17 @@ namespace Gameplay
 
 	static void DrawTutorial()
 	{
-		int textControlsWidth = MeasureText(TEXT_CONTROLS.c_str(), TUTORIAL_FONT_SIZE);
+		int textControlsWidth = 0;
+
+		if (CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
+		{
+			textControlsWidth = MeasureText(TEXT_MULTCONTROLS.c_str(), TUTORIAL_FONT_SIZE);
+		}
+		else
+		{
+			textControlsWidth = MeasureText(TEXT_CONTROLS.c_str(), TUTORIAL_FONT_SIZE);
+		}
+
 		int textStartGameWidth = MeasureText(TEXT_START_GAME.c_str(), TUTORIAL_FONT_SIZE);
 
 		int textControlsX = (SCREEN_WIDTH - textControlsWidth) / 2;
@@ -184,7 +226,16 @@ namespace Gameplay
 		int textStartGameY = textControlsY + TUTORIAL_FONT_SIZE + TUTORIAL_TEXT_SPACING;
 
 		DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, TUTORIAL_BACKGROUND);
-		DrawText(TEXT_CONTROLS.c_str(), textControlsX, textControlsY, TUTORIAL_FONT_SIZE, WHITE);
+
+		if (CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
+		{
+			DrawText(TEXT_MULTCONTROLS.c_str(), textControlsX, textControlsY, TUTORIAL_FONT_SIZE, WHITE);
+		}
+		else
+		{
+			DrawText(TEXT_CONTROLS.c_str(), textControlsX, textControlsY, TUTORIAL_FONT_SIZE, WHITE);
+		}
+
 		DrawText(TEXT_START_GAME.c_str(), textStartGameX, textStartGameY, TUTORIAL_FONT_SIZE, WHITE);
 	}
 
@@ -231,7 +282,14 @@ namespace Gameplay
 	static void Reset()
 	{
 		Player::Reset(player);
+
 		Player::Reset(player2);
+
+		if (CosmicJump::currentScene != CosmicJump::Scenes::Multiplayer)
+		{
+			player2.isActive = false;
+		}
+
 		Obstacle::Reset(obstacle);
 	}
 }

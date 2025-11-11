@@ -64,6 +64,11 @@ namespace CosmicJump
 			Gameplay::Input();
 
 			break;
+		case CosmicJump::Scenes::Multiplayer:
+
+			Gameplay::Input();
+
+			break;
 		case CosmicJump::Scenes::Credits:
 
 			Credits::Input();
@@ -91,6 +96,11 @@ namespace CosmicJump
 			Gameplay::Update();
 
 			break;
+		case CosmicJump::Scenes::Multiplayer:
+
+			Gameplay::Update();
+
+			break;
 		case CosmicJump::Scenes::Credits:
 
 			Credits::Update();
@@ -114,6 +124,11 @@ namespace CosmicJump
 
 			break;
 		case CosmicJump::Scenes::Gameplay:
+
+			Gameplay::Draw();
+
+			break;
+		case CosmicJump::Scenes::Multiplayer:
 
 			Gameplay::Draw();
 

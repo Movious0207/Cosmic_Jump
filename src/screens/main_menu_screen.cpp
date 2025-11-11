@@ -15,13 +15,14 @@ namespace MainMenu
 {
 	static Geometry::Rectangle logo;
 
-	static const int MAX_BUTTONS = 3;
+	static const int MAX_BUTTONS = 4;
 	static Button::Button buttons[MAX_BUTTONS];
-	static const std::string buttonNames[MAX_BUTTONS] = { "Play", "Credits", "Exit" };
+	static const std::string buttonNames[MAX_BUTTONS] = { "Play", "Multiplayer" ,"Credits", "Exit"};
 
 	enum ButtonID
 	{
 		Play,
+		Multiplayer,
 		Credits,
 		Exit,
 	};
@@ -122,6 +123,11 @@ namespace MainMenu
 		if (buttons[Play].clicked)
 		{
 			CosmicJump::currentScene = CosmicJump::Scenes::Gameplay;
+		}
+
+		if (buttons[Multiplayer].clicked)
+		{
+			CosmicJump::currentScene = CosmicJump::Scenes::Multiplayer;
 		}
 
 		if (buttons[Credits].clicked)
