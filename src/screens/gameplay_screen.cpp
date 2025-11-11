@@ -146,7 +146,7 @@ namespace Gameplay
 		{
 			Player::Draw(player);
 		}
-		if (player2.isActive)
+		if (player2.isActive && CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
 		{
 			Player::Draw(player2);
 		}
