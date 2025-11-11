@@ -7,4 +7,7 @@ namespace Gameplay
 	void Update();
 	void Draw();
 	void Close();
+	void MultiplayerInput();
+	void MultiplayerUpdate();
+	void MultiplayerDraw();
 }

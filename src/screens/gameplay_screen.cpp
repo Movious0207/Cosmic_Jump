@@ -16,6 +16,9 @@ using namespace Collision;
 namespace Gameplay
 {
 	static Player::Player player;
+	
+	static Player::Player player2;
+
 	static Obstacle::Obstacle obstacle;
 
 	static Button::Button button;
@@ -47,6 +50,7 @@ namespace Gameplay
 	void Init()
 	{
 		player = Player::Create();
+		player2 = Player::Create();
 		obstacle = Obstacle::Create();
 
 		InitButton();
@@ -62,17 +66,25 @@ namespace Gameplay
 			CosmicJump::currentScene = CosmicJump::Scenes::MainMenu;
 		}
 
-		if (IsKeyPressed(KEY_SPACE) && isGameStarted)
+		if (player.isActive)
 		{
-			Player::Jump(player);
-		}
-		else
-		{
-			if (IsKeyPressed(KEY_SPACE) && !isGameStarted)
+			if (IsKeyPressed(KEY_SPACE) && isGameStarted)
 			{
-				isGameStarted = true;
 				Player::Jump(player);
 			}
+		}
+
+		if (player2.isActive)
+		{
+			if (IsKeyPressed(KEY_UP) && isGameStarted)
+			{
+				Player::Jump(player2);
+			}
+		}
+		if (IsKeyPressed(KEY_SPACE) && !isGameStarted)
+		{
+			isGameStarted = true;
+			Player::Jump(player);
 		}
 	}
 
@@ -84,7 +96,14 @@ namespace Gameplay
 		{
 			Background::Update(deltaTime);
 
-			Player::Update(player, deltaTime);
+			if (player.isActive)
+			{
+				Player::Update(player, deltaTime);
+			}
+			if (player2.isActive)
+			{
+				Player::Update(player2, deltaTime);
+			}
 			Obstacle::Update(obstacle, deltaTime);
 
 			HandleCollisionBetweenPlayerAndObstacle();
@@ -101,7 +120,14 @@ namespace Gameplay
 
 		Background::Draw();
 
-		Player::Draw(player);
+		if (player.isActive)
+		{
+			Player::Draw(player);
+		}
+		if (player2.isActive)
+		{
+			Player::Draw(player2);
+		}
 		Obstacle::Draw(obstacle);
 
 		if (!isGameStarted)
@@ -164,26 +190,48 @@ namespace Gameplay
 
 	static void HandleCollisionBetweenPlayerAndObstacle()
 	{
+
 		if (CheckCollisionRectangle(player.rectangle, obstacle.rectangleTop) ||
 			CheckCollisionRectangle(player.rectangle, obstacle.rectangleBottom))
+		{
+			player.isActive = false;
+		}
+		if (CheckCollisionRectangle(player2.rectangle, obstacle.rectangleTop) ||
+			CheckCollisionRectangle(player2.rectangle, obstacle.rectangleBottom))
+		{
+			player2.isActive = false;
+		}
+
+		if (!player.isActive && !player2.isActive)
 		{
 			Reset();
 			isGameStarted = false;
 		}
+
 	}
 
 	static void HandlePlayerFloorCollision()
 	{
 		if (player.rectangle.y + player.rectangle.height >= SCREEN_HEIGHT)
 		{
+			player.isActive = false;
+		}
+		if (player2.rectangle.y + player2.rectangle.height >= SCREEN_HEIGHT)
+		{
+			player2.isActive = false;
+		}
+		if (!player.isActive && !player2.isActive)
+		{
 			Reset();
 			isGameStarted = false;
 		}
+
 	}
 
 	static void Reset()
 	{
 		Player::Reset(player);
+		Player::Reset(player2);
 		Obstacle::Reset(obstacle);
 	}
 }
