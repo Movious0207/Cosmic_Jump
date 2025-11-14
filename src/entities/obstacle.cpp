@@ -40,8 +40,14 @@ namespace Obstacle
 		int obstacleBottomWidth = static_cast<int>(obstacle.rectangleBottom.width);
 		int obstacleBottomHeight = static_cast<int>(obstacle.rectangleBottom.height);
 
+		int obstacleMidX = static_cast<int>(obstacle.rectangleMid.x);
+		int obstacleMidY = static_cast<int>(obstacle.rectangleMid.y);
+		int obstacleMidWidth = static_cast<int>(obstacle.rectangleMid.width);
+		int obstacleMidHeight = static_cast<int>(obstacle.rectangleMid.height);
+
 		DrawRectangle(obstacleTopX, obstacleTopY, obstacleTopWidth, obstacleTopHeight, RED);
 		DrawRectangle(obstacleBottomX, obstacleBottomY, obstacleBottomWidth, obstacleBottomHeight, RED);
+		DrawRectangleLines(obstacleMidX, obstacleMidY, obstacleMidWidth, obstacleMidHeight, BLACK);
 	}
 
 	Obstacle Create()
@@ -63,6 +69,7 @@ namespace Obstacle
 	static void Move(Obstacle& obstacle, float deltaTime)
 	{
 		obstacle.rectangleTop.x -= obstacle.speedX * deltaTime;
+		obstacle.rectangleMid.x -= obstacle.speedX * deltaTime;
 		obstacle.rectangleBottom.x -= obstacle.speedX * deltaTime;
 	}
 
@@ -95,5 +102,10 @@ namespace Obstacle
 		obstacle.rectangleBottom.y = bottomY;
 		obstacle.rectangleBottom.width = WIDTH;
 		obstacle.rectangleBottom.height = bottomHeight;
+
+		obstacle.rectangleMid.x = x;
+		obstacle.rectangleMid.y = gapY;
+		obstacle.rectangleMid.width = WIDTH;
+		obstacle.rectangleMid.height = gap;
 	}
 }

@@ -55,6 +55,7 @@ namespace Player
 	void Reset(Player& player)
 	{
 		player.isActive = true;
+		player.score = 0;
 		player.rectangle.y = static_cast<float>(SCREEN_HEIGHT) / 2.0f - DEFAULT_WIDTH / 2.0f;
 		player.speedY = 0.0f;
 	}

@@ -8,6 +8,7 @@ namespace Obstacle
 	{
 		Geometry::Rectangle rectangleTop;
 		Geometry::Rectangle rectangleBottom;
+		Geometry::Rectangle rectangleMid;
 		float speedX;
 		bool isActive;
 	};

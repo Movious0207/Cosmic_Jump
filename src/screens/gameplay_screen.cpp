@@ -261,6 +261,40 @@ namespace Gameplay
 
 	}
 
+	static void PlayerScoreCheck()
+	{
+		static bool isColliding[2] = { false };
+		static bool wasColliding[2] = { false };
+
+		if (player.isActive && CheckCollisionRectangle(player.rectangle, obstacle.rectangleMid))
+		{
+			isColliding[0] = true;
+			wasColliding[0] = true;
+		}
+		else
+		{
+			isColliding[0] = false;
+		}
+		if (!isColliding[0] && wasColliding[0])
+		{
+			player.score++;
+		}
+		
+		if (player2.isActive && CheckCollisionRectangle(player2.rectangle, obstacle.rectangleMid))
+		{
+			isColliding[1] = true;
+			wasColliding[1] = true;
+		}
+		else
+		{
+			isColliding[1] = false;
+		}
+		if (!isColliding[1] && wasColliding[1])
+		{
+			player.score++;
+		}
+	}
+
 	static void HandlePlayerFloorCollision()
 	{
 		if (player.rectangle.y + player.rectangle.height >= SCREEN_HEIGHT)

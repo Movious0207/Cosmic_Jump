@@ -9,6 +9,7 @@ namespace Player
 		Geometry::Rectangle rectangle;
 		float speedX;
 		float speedY;
+		int score;
 		bool isActive;
 	};
 
