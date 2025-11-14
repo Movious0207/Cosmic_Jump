@@ -100,12 +100,7 @@ namespace Gameplay
 
 			if (CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
 			{
-				player2.isActive = true;
 				Player::Jump(player2);
-			}
-			else
-			{
-				player2.isActive = false;
 			}
 		}
 	}
@@ -248,18 +243,10 @@ namespace Gameplay
 	static void DrawScore()
 	{
 		int scoreYPos = SCREEN_HEIGHT / 6;
+		int scoreXPos = { SCREEN_WIDTH / 2 };
 
-		if (CosmicJump::currentScene == CosmicJump::Scenes::Gameplay)
-		{
-			int scoreXPos = { SCREEN_WIDTH / 2 };
-			DrawText(std::to_string(player.score).c_str(), scoreXPos, scoreYPos, 50, WHITE);
-		}
-		if (CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
-		{
-			int scoreXPos[2] = { SCREEN_WIDTH / 3, (SCREEN_WIDTH / 3) * 2 };
-			DrawText(std::to_string(player.score).c_str(),scoreXPos[0],scoreYPos,50,WHITE);
-			DrawText(std::to_string(player2.score).c_str(), scoreXPos[1], scoreYPos, 50, WHITE);
-		}
+		DrawText(std::to_string(player.score).c_str(), scoreXPos, scoreYPos, 50, WHITE);
+
 	}
 
 	static void HandleCollisionBetweenPlayerAndObstacle()
@@ -286,37 +273,33 @@ namespace Gameplay
 
 	static void PlayerScoreCheck()
 	{
-		static bool isColliding[2] = { false };
-		static bool wasColliding[2] = { false };
+		static bool isColliding = { false };
+		static bool wasColliding = { false };
 
 		if (player.isActive && CheckCollisionRectangle(player.rectangle, obstacle.rectangleMid))
 		{
-			isColliding[0] = true;
-			wasColliding[0] = true;
+			isColliding = true;
+			wasColliding = true;
 		}
 		else
 		{
-			isColliding[0] = false;
-		}
-		if (!isColliding[0] && wasColliding[0])
-		{
-			player.score++;
-			wasColliding[0] = false;
+			isColliding = false;
 		}
 		
-		if (player2.isActive && CheckCollisionRectangle(player2.rectangle, obstacle.rectangleMid))
+		if (!player.isActive && player2.isActive && CheckCollisionRectangle(player2.rectangle, obstacle.rectangleMid))
 		{
-			isColliding[1] = true;
-			wasColliding[1] = true;
+			isColliding = true;
+			wasColliding = true;
 		}
-		else
+		else if (!player.isActive)
 		{
-			isColliding[1] = false;
+			isColliding = false;
 		}
-		if (!isColliding[1] && wasColliding[1])
+
+		if (!isColliding && wasColliding)
 		{
-			player2.score++;
-			wasColliding[1] = false;
+			player.score++;
+			wasColliding = false;
 		}
 	}
 
