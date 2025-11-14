@@ -1,5 +1,6 @@
 #include "screens/gameplay_screen.h"
 
+#include <string>
 #include "raylib.h"
 
 #include "game/game.h"
@@ -44,8 +45,10 @@ namespace Gameplay
 	static void UpdateButton();
 	static void DrawButton();
 	static void DrawTutorial();
+	static void DrawScore();
 	static void HandleCollisionBetweenPlayerAndObstacle();
 	static void HandlePlayerFloorCollision();
+	static void PlayerScoreCheck();
 	static void Reset();
 
 	void Init()
@@ -130,6 +133,7 @@ namespace Gameplay
 
 			HandleCollisionBetweenPlayerAndObstacle();
 			HandlePlayerFloorCollision();
+			PlayerScoreCheck();
 		}
 
 		UpdateButton();
@@ -164,6 +168,8 @@ namespace Gameplay
 
 			DrawTutorial();
 		}
+
+		DrawScore();
 
 		DrawButton();
 
@@ -239,6 +245,23 @@ namespace Gameplay
 		DrawText(TEXT_START_GAME.c_str(), textStartGameX, textStartGameY, TUTORIAL_FONT_SIZE, WHITE);
 	}
 
+	static void DrawScore()
+	{
+		int scoreYPos = SCREEN_HEIGHT / 6;
+
+		if (CosmicJump::currentScene == CosmicJump::Scenes::Gameplay)
+		{
+			int scoreXPos = { SCREEN_WIDTH / 2 };
+			DrawText(std::to_string(player.score).c_str(), scoreXPos, scoreYPos, 50, WHITE);
+		}
+		if (CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
+		{
+			int scoreXPos[2] = { SCREEN_WIDTH / 3, (SCREEN_WIDTH / 3) * 2 };
+			DrawText(std::to_string(player.score).c_str(),scoreXPos[0],scoreYPos,50,WHITE);
+			DrawText(std::to_string(player2.score).c_str(), scoreXPos[1], scoreYPos, 50, WHITE);
+		}
+	}
+
 	static void HandleCollisionBetweenPlayerAndObstacle()
 	{
 
@@ -278,6 +301,7 @@ namespace Gameplay
 		if (!isColliding[0] && wasColliding[0])
 		{
 			player.score++;
+			wasColliding[0] = false;
 		}
 		
 		if (player2.isActive && CheckCollisionRectangle(player2.rectangle, obstacle.rectangleMid))
@@ -291,7 +315,8 @@ namespace Gameplay
 		}
 		if (!isColliding[1] && wasColliding[1])
 		{
-			player.score++;
+			player2.score++;
+			wasColliding[1] = false;
 		}
 	}
 
