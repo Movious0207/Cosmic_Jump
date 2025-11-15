@@ -41,6 +41,15 @@ namespace Player
 
 			DrawRectangle(x, y, width, height, GREEN);
 		}
+		else if (player.respawning)
+		{
+			int x = static_cast<int>(player.rectangle.x);
+			int y = SCREEN_HEIGHT / 2 - static_cast<int>(DEFAULT_WIDTH) / 2;
+			int width = static_cast<int>(player.rectangle.width);
+			int height = static_cast<int>(player.rectangle.height);
+
+			DrawRectangle(x, y, width, height, WHITE);
+		}
 
 		if (player2.isActive)
 		{
@@ -51,6 +60,16 @@ namespace Player
 
 			DrawRectangle(x, y, width, height, RED);
 		}
+		else if (player2.respawning)
+		{
+			int x = static_cast<int>(player2.rectangle.x);
+			int y = SCREEN_HEIGHT / 2 - static_cast<int>(DEFAULT_WIDTH) / 2;
+			int width = static_cast<int>(player2.rectangle.width);
+			int height = static_cast<int>(player2.rectangle.height);
+
+			DrawRectangle(x, y, width, height, WHITE);
+		}
+
 	}
 
 	Player Create()
