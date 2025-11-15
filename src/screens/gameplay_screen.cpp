@@ -28,6 +28,7 @@ namespace Gameplay
 	static Sound jumpSound;
 	static Sound scoreSound;
 	static Sound hitSound;
+	static Sound fallingSound;
 
 	static const float BUTTON_WIDTH = 60.0f;
 	static const float BUTTON_HEIGHT = 60.0f;
@@ -80,7 +81,7 @@ namespace Gameplay
 		if (IsKeyPressed(KEY_ESCAPE))
 		{
 			CosmicJump::currentScene = CosmicJump::Scenes::MainMenu;
-			Reset();
+
 			isGameStarted = false;
 		}
 
@@ -104,7 +105,6 @@ namespace Gameplay
 
 		if (IsKeyPressed(KEY_SPACE) && !isGameStarted)
 		{
-			Reset();
 			isGameStarted = true;
 			Player::Jump(player);
 
@@ -161,6 +161,7 @@ namespace Gameplay
 		if (!isGameStarted)
 		{
 			Reset();
+
 			Player::Draw(player,player2);
 
 			DrawTutorial();
@@ -178,6 +179,7 @@ namespace Gameplay
 		UnloadSound(jumpSound);
 		UnloadSound(scoreSound);
 		UnloadSound(hitSound);
+		UnloadSound(fallingSound);
 	}
 
 	static void InitButton()
@@ -193,6 +195,7 @@ namespace Gameplay
 		jumpSound = LoadSound("res/sounds/Jump.wav");
 		scoreSound = LoadSound("res/sounds/Score.wav");
 		hitSound = LoadSound("res/sounds/Hit.mp3");
+		fallingSound = LoadSound("res/sounds/Falling.wav");
 	}
 
 	static void UpdateButton()
@@ -202,7 +205,6 @@ namespace Gameplay
 		if (button.clicked)
 		{
 			CosmicJump::currentScene = CosmicJump::Scenes::MainMenu;
-			Reset();
 			isGameStarted = false;
 		}
 	}
@@ -324,12 +326,14 @@ namespace Gameplay
 
 	static void HandlePlayerFloorCollision()
 	{
-		if (player.rectangle.y + player.rectangle.height >= SCREEN_HEIGHT)
+		if (player.rectangle.y + player.rectangle.height >= SCREEN_HEIGHT && player.isActive)
 		{
+			PlaySound(fallingSound);
 			player.isActive = false;
 		}
-		if (player2.rectangle.y + player2.rectangle.height >= SCREEN_HEIGHT)
+		if (player2.rectangle.y + player2.rectangle.height >= SCREEN_HEIGHT && player.isActive)
 		{
+			PlaySound(fallingSound);
 			player2.isActive = false;
 		}
 		if (!player.isActive && !player2.isActive)
