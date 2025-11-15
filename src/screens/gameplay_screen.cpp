@@ -25,6 +25,9 @@ namespace Gameplay
 	static Button::Button button;
 	static const std::string buttonName = " | | ";
 
+	static Sound jumpSound;
+	static Sound scoreSound;
+
 	static const float BUTTON_WIDTH = 60.0f;
 	static const float BUTTON_HEIGHT = 60.0f;
 	static const float BUTTON_MARGIN = 10.0f;
@@ -42,6 +45,7 @@ namespace Gameplay
 	static bool isGameStarted;
 
 	static void InitButton();
+	static void InitAudio();
 	static void UpdateButton();
 	static void DrawButton();
 	static void DrawTutorial();
@@ -63,7 +67,7 @@ namespace Gameplay
 		player2.rectangle.x = DEFAULT_X + 50.0f;
 
 
-
+		InitAudio();
 		InitButton();
 
 		deltaTime = GetFrameTime();
@@ -84,6 +88,7 @@ namespace Gameplay
 			if (IsKeyPressed(KEY_SPACE) && isGameStarted)
 			{
 				Player::Jump(player);
+				PlaySound(jumpSound);
 			}
 		}
 
@@ -92,8 +97,10 @@ namespace Gameplay
 			if (IsKeyPressed(KEY_UP) && isGameStarted)
 			{
 				Player::Jump(player2);
+				PlaySound(jumpSound);
 			}
 		}
+
 		if (IsKeyPressed(KEY_SPACE) && !isGameStarted)
 		{
 			Reset();
@@ -104,6 +111,7 @@ namespace Gameplay
 			{
 				Player::Jump(player2);
 			}
+			PlaySound(jumpSound);
 		}
 	}
 
@@ -175,7 +183,7 @@ namespace Gameplay
 
 	void Close()
 	{
-
+		UnloadSound(jumpSound);
 	}
 
 	static void InitButton()
@@ -184,6 +192,12 @@ namespace Gameplay
 		float y = BUTTON_MARGIN;
 
 		button = Button::Create(x, y, BUTTON_WIDTH, BUTTON_HEIGHT, buttonName);
+	}
+
+	static void InitAudio()
+	{
+		jumpSound = LoadSound("res/sounds/Jump.wav");
+		scoreSound = LoadSound("res/sounds/Score.wav");
 	}
 
 	static void UpdateButton()
@@ -300,6 +314,7 @@ namespace Gameplay
 
 		if (!isColliding && wasColliding)
 		{
+			PlaySound(scoreSound);
 			player.score++;
 			wasColliding = false;
 		}
