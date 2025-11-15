@@ -47,6 +47,7 @@ namespace Player
 		newPlayer.rectangle.height = DEFAULT_HEIGHT;
 		newPlayer.speedX = 0.0f;
 		newPlayer.speedY = 0.0f;
+		newPlayer.score = 0;
 		newPlayer.isActive = true;
 
 		return newPlayer;

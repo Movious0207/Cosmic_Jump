@@ -62,6 +62,8 @@ namespace Gameplay
 		player.rectangle.x = DEFAULT_X - 50.0f;
 		player2.rectangle.x = DEFAULT_X + 50.0f;
 
+
+
 		InitButton();
 
 		deltaTime = GetFrameTime();

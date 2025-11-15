@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\audio\audio_manager.cpp" />
     <ClCompile Include="src\background\background_manager.cpp" />
     <ClCompile Include="src\collision\collision_manager.cpp" />
     <ClCompile Include="src\entities\obstacle.cpp" />
@@ -24,6 +25,7 @@
     <ClCompile Include="src\utilities\math_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\audio\audio_manager.h" />
     <ClInclude Include="src\background\background_manager.h" />
     <ClInclude Include="src\collision\collision_manager.h" />
     <ClInclude Include="src\entities\obstacle.h" />
