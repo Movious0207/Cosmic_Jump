@@ -27,6 +27,7 @@ namespace Gameplay
 
 	static Sound jumpSound;
 	static Sound scoreSound;
+	static Sound hitSound;
 
 	static const float BUTTON_WIDTH = 60.0f;
 	static const float BUTTON_HEIGHT = 60.0f;
@@ -184,6 +185,8 @@ namespace Gameplay
 	void Close()
 	{
 		UnloadSound(jumpSound);
+		UnloadSound(scoreSound);
+		UnloadSound(hitSound);
 	}
 
 	static void InitButton()
@@ -198,6 +201,7 @@ namespace Gameplay
 	{
 		jumpSound = LoadSound("res/sounds/Jump.wav");
 		scoreSound = LoadSound("res/sounds/Score.wav");
+		hitSound = LoadSound("res/sounds/Hit.mp3");
 	}
 
 	static void UpdateButton()
@@ -267,16 +271,23 @@ namespace Gameplay
 
 	static void HandleCollisionBetweenPlayerAndObstacle()
 	{
-
-		if (CheckCollisionRectangle(player.rectangle, obstacle.rectangleTop) ||
-			CheckCollisionRectangle(player.rectangle, obstacle.rectangleBottom))
+		if (player.isActive)
 		{
-			player.isActive = false;
+			if (CheckCollisionRectangle(player.rectangle, obstacle.rectangleTop) ||
+				CheckCollisionRectangle(player.rectangle, obstacle.rectangleBottom))
+			{
+				PlaySound(hitSound);
+				player.isActive = false;
+			}
 		}
-		if (CheckCollisionRectangle(player2.rectangle, obstacle.rectangleTop) ||
-			CheckCollisionRectangle(player2.rectangle, obstacle.rectangleBottom))
+		if (player2.isActive)
 		{
-			player2.isActive = false;
+			if (CheckCollisionRectangle(player2.rectangle, obstacle.rectangleTop) ||
+				CheckCollisionRectangle(player2.rectangle, obstacle.rectangleBottom))
+			{
+				PlaySound(hitSound);
+				player2.isActive = false;
+			}
 		}
 
 		if (!player.isActive && !player2.isActive)
