@@ -46,12 +46,14 @@ namespace Gameplay
 
 	static float deltaTime;
 	static bool isGameStarted;
+	static bool isGameOver;
 
 	static void InitButton();
 	static void InitAudio();
 	static void UpdateButton();
 	static void DrawButton();
 	static void DrawTutorial();
+	static void DrawGameEnd();
 	static void DrawScore();
 	static void HandleCollisionBetweenPlayerAndObstacle();
 	static void HandlePlayerFloorCollision();
@@ -86,6 +88,7 @@ namespace Gameplay
 			CosmicJump::currentScene = CosmicJump::Scenes::MainMenu;
 
 			isGameStarted = false;
+			isGameOver = false;
 		}
 
 		if (player.isActive)
@@ -106,7 +109,7 @@ namespace Gameplay
 			}
 		}
 
-		if (IsKeyPressed(KEY_SPACE) && !isGameStarted)
+		if (IsKeyPressed(KEY_SPACE) && !isGameStarted && !isGameOver)
 		{
 			isGameStarted = true;
 			Player::Jump(player);
@@ -116,6 +119,10 @@ namespace Gameplay
 				Player::Jump(player2);
 			}
 			PlaySound(jumpSound);
+		}
+		else if (IsKeyPressed(KEY_SPACE) && !isGameStarted)
+		{
+			isGameOver = false;
 		}
 	}
 
@@ -166,7 +173,7 @@ namespace Gameplay
 
 		Obstacle::Draw(obstacle);
 
-		if (!isGameStarted)
+		if (!isGameStarted && !isGameOver)
 		{
 			Reset();
 
@@ -174,8 +181,15 @@ namespace Gameplay
 
 			DrawTutorial();
 		}
+		else if (isGameOver)
+		{
+			DrawGameEnd();
+		}
 
-		DrawScore();
+		if (isGameStarted)
+		{
+			DrawScore();
+		}
 
 		DrawButton();
 
@@ -216,6 +230,7 @@ namespace Gameplay
 			StopMusicStream(gameMusic);
 			CosmicJump::currentScene = CosmicJump::Scenes::MainMenu;
 			isGameStarted = false;
+			isGameOver = false;
 		}
 	}
 
@@ -263,6 +278,39 @@ namespace Gameplay
 		DrawText(TEXT_START_GAME.c_str(), textStartGameX, textStartGameY, TUTORIAL_FONT_SIZE, WHITE);
 	}
 
+	static void DrawGameEnd()
+	{
+		int textGameOverWidth = 0;
+
+
+		textGameOverWidth = MeasureText("GAME OVER!", TUTORIAL_FONT_SIZE);
+
+
+		int textScoreWidth = MeasureText(std::to_string(player.score).c_str(), TUTORIAL_FONT_SIZE);
+		textScoreWidth += MeasureText("Final Score: ", TUTORIAL_FONT_SIZE);
+
+		int textGameOverX = (SCREEN_WIDTH - textGameOverWidth) / 2;
+		int textScoreX = (SCREEN_WIDTH - textScoreWidth) / 2;
+
+		int totalBlockHeight = TUTORIAL_FONT_SIZE + TUTORIAL_TEXT_SPACING + TUTORIAL_FONT_SIZE;
+		int blockTopY = (SCREEN_HEIGHT - totalBlockHeight) / 2;
+
+		int textGameOverY = blockTopY;
+		int textScoreY = textGameOverY + TUTORIAL_FONT_SIZE + TUTORIAL_TEXT_SPACING;
+
+		DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, TUTORIAL_BACKGROUND);
+
+		DrawText("GAME OVER!", textGameOverX, textGameOverY, TUTORIAL_FONT_SIZE, WHITE);
+
+		DrawText("Final Score: ", textScoreX, textScoreY, TUTORIAL_FONT_SIZE, WHITE);
+
+		textScoreWidth = MeasureText("Final Score: ", TUTORIAL_FONT_SIZE);
+
+		textScoreX = (SCREEN_WIDTH + textScoreWidth) / 2;
+
+		DrawText(std::to_string(player.score).c_str(), textScoreX, textScoreY, TUTORIAL_FONT_SIZE, WHITE);
+	}
+
 	static void DrawScore()
 	{
 		int scoreYPos = SCREEN_HEIGHT / 6;
@@ -295,8 +343,8 @@ namespace Gameplay
 
 		if (!player.isActive && !player2.isActive)
 		{
-			Reset();
 			isGameStarted = false;
+			isGameOver = true;
 		}
 
 	}
@@ -348,8 +396,8 @@ namespace Gameplay
 		}
 		if (!player.isActive && !player2.isActive)
 		{
-			Reset();
 			isGameStarted = false;
+			isGameOver = true;
 		}
 
 	}

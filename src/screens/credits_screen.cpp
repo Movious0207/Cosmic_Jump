@@ -20,7 +20,7 @@ namespace Credits
 	static const int FONT_SIZE_TEXT = 32;
 
 	static const float TITLE_TOP_OFFSET = 0.1f;
-	static const float LABEL_Y_CENTER = 0.5f;
+	static const float LABEL_Y_CENTER = 0.2f;
 	static const int AUTHOR_LINE_SPACING = 40;
 
 	static Button::Button button;
