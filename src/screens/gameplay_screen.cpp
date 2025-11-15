@@ -47,6 +47,8 @@ namespace Gameplay
 	static float deltaTime;
 	static bool isGameStarted;
 	static bool isGameOver;
+	static int score;
+	static float respawnTimer;
 
 	static void InitButton();
 	static void InitAudio();
@@ -58,6 +60,7 @@ namespace Gameplay
 	static void HandleCollisionBetweenPlayerAndObstacle();
 	static void HandlePlayerFloorCollision();
 	static void PlayerScoreCheck();
+	static void PlayerRespawn();
 	static void Reset();
 
 	void Init()
@@ -148,6 +151,15 @@ namespace Gameplay
 			{
 				Player::Update(player, deltaTime);
 				Player::Update(player2, deltaTime);
+
+				if (!player.isActive && player2.isActive)
+				{
+					PlayerRespawn();
+				}
+				else if (player.isActive && !player2.isActive)
+				{
+					PlayerRespawn();
+				}
 			}
 
 			Obstacle::Update(obstacle, deltaTime);
@@ -286,7 +298,7 @@ namespace Gameplay
 		textGameOverWidth = MeasureText("GAME OVER!", TUTORIAL_FONT_SIZE);
 
 
-		int textScoreWidth = MeasureText(std::to_string(player.score).c_str(), TUTORIAL_FONT_SIZE);
+		int textScoreWidth = MeasureText(std::to_string(score).c_str(), TUTORIAL_FONT_SIZE);
 		textScoreWidth += MeasureText("Final Score: ", TUTORIAL_FONT_SIZE);
 
 		int textGameOverX = (SCREEN_WIDTH - textGameOverWidth) / 2;
@@ -308,7 +320,7 @@ namespace Gameplay
 
 		textScoreX = (SCREEN_WIDTH + textScoreWidth) / 2;
 
-		DrawText(std::to_string(player.score).c_str(), textScoreX, textScoreY, TUTORIAL_FONT_SIZE, WHITE);
+		DrawText(std::to_string(score).c_str(), textScoreX, textScoreY, TUTORIAL_FONT_SIZE, WHITE);
 	}
 
 	static void DrawScore()
@@ -316,7 +328,7 @@ namespace Gameplay
 		int scoreYPos = SCREEN_HEIGHT / 6;
 		int scoreXPos = { SCREEN_WIDTH / 2 };
 
-		DrawText(std::to_string(player.score).c_str(), scoreXPos, scoreYPos, 50, WHITE);
+		DrawText(std::to_string(score).c_str(), scoreXPos, scoreYPos, 50, WHITE);
 
 	}
 
@@ -329,6 +341,7 @@ namespace Gameplay
 			{
 				PlaySound(hitSound);
 				player.isActive = false;
+				respawnTimer = 3.0f;
 			}
 		}
 		if (player2.isActive)
@@ -338,6 +351,7 @@ namespace Gameplay
 			{
 				PlaySound(hitSound);
 				player2.isActive = false;
+				respawnTimer = 3.0f;
 			}
 		}
 
@@ -377,7 +391,7 @@ namespace Gameplay
 		if (!isColliding && wasColliding)
 		{
 			PlaySound(scoreSound);
-			player.score++;
+			score++;
 			wasColliding = false;
 		}
 	}
@@ -388,11 +402,13 @@ namespace Gameplay
 		{
 			PlaySound(fallingSound);
 			player.isActive = false;
+			respawnTimer = 3.0f;
 		}
 		if (player2.rectangle.y + player2.rectangle.height >= SCREEN_HEIGHT && player2.isActive)
 		{
 			PlaySound(fallingSound);
 			player2.isActive = false;
+			respawnTimer = 3.0f;
 		}
 		if (!player.isActive && !player2.isActive)
 		{
@@ -402,8 +418,33 @@ namespace Gameplay
 
 	}
 
+	static void PlayerRespawn()
+	{
+		respawnTimer -= GetFrameTime();
+		if (!player.isActive && respawnTimer < 1)
+		{
+			player.respawning = true;
+		}
+		if (!player.isActive&& respawnTimer < 0)
+		{
+			player.respawning = false;
+			Player::Reset(player);
+		}
+		if (!player2.isActive && respawnTimer < 1)
+		{
+			player2.respawning = true;
+		}
+		if (!player2.isActive && respawnTimer < 0)
+		{
+			player2.respawning = false;
+			Player::Reset(player2);
+		}
+	}
+
 	static void Reset()
 	{
+		score = 0;
+
 		Player::Reset(player);
 
 		Player::Reset(player2);

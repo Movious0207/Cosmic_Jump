@@ -20,7 +20,10 @@ namespace Player
 
 	void Update(Player& player, float deltaTime)
 	{
-		UpdateGravity(player, deltaTime);
+		if (player.isActive)
+		{
+			UpdateGravity(player, deltaTime);
+		}
 
 		player.rectangle.y += player.speedY * deltaTime;
 
@@ -60,7 +63,6 @@ namespace Player
 		newPlayer.rectangle.height = DEFAULT_HEIGHT;
 		newPlayer.speedX = 0.0f;
 		newPlayer.speedY = 0.0f;
-		newPlayer.score = 0;
 		newPlayer.isActive = true;
 
 		return newPlayer;
@@ -69,7 +71,6 @@ namespace Player
 	void Reset(Player& player)
 	{
 		player.isActive = true;
-		player.score = 0;
 		player.rectangle.y = static_cast<float>(SCREEN_HEIGHT) / 2.0f - DEFAULT_WIDTH / 2.0f;
 		player.speedY = 0.0f;
 	}

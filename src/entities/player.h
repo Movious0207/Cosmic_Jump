@@ -9,8 +9,8 @@ namespace Player
 		Geometry::Rectangle rectangle;
 		float speedX;
 		float speedY;
-		int score;
 		bool isActive;
+		bool respawning;
 	};
 
 	void Update(Player& player, float deltaTime);
