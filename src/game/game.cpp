@@ -9,6 +9,7 @@
 #include "screens/gameplay_screen.h"
 #include "screens/credits_screen.h"
 #include "background/background_manager.h"
+#include "audio/audio_manager.h"
 
 using namespace Game;
 
@@ -43,6 +44,7 @@ namespace CosmicJump
 
 	static void Init()
 	{
+		Audio::Init();
 		MainMenu::Init();
 		Gameplay::Init();
 		Credits::Init();
@@ -153,5 +155,6 @@ namespace CosmicJump
 		Credits::Close();
 
 		Background::Close();
+		Audio::Close();
 	}
 }

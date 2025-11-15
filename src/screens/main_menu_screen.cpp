@@ -7,6 +7,7 @@
 #include "interface/button.h"
 #include "game/game_constants.h"
 #include "interface/ui_constants.h"
+#include "audio/audio_manager.h"
 
 using namespace Game;
 using namespace UIConstants;
@@ -14,6 +15,8 @@ using namespace UIConstants;
 namespace MainMenu
 {
 	static Geometry::Rectangle logo;
+
+	static Sound buttonSound;
 
 	static const int MAX_BUTTONS = 4;
 	static Button::Button buttons[MAX_BUTTONS];
@@ -29,6 +32,7 @@ namespace MainMenu
 
 	static void InitLogo();
 	static void InitButtons();
+	static void InitAudio();
 	static void UpdateButtons();
 	static void DrawLogo();
 	static void DrawButtons();
@@ -39,6 +43,7 @@ namespace MainMenu
 	{
 		InitLogo();
 		InitButtons();
+		InitAudio();
 	}
 
 	void Input()
@@ -65,7 +70,7 @@ namespace MainMenu
 
 	void Close()
 	{
-
+		UnloadSound(buttonSound);
 	}
 
 	static void InitLogo()
@@ -95,6 +100,11 @@ namespace MainMenu
 		}
 	}
 
+	static void InitAudio()
+	{
+		buttonSound = LoadSound("res/sounds/buttonClick.mp3");
+	}
+
 	static void DrawLogo()
 	{
 		int x = static_cast<int>(logo.x);
@@ -115,6 +125,8 @@ namespace MainMenu
 
 	static void UpdateButtons()
 	{
+		static bool CloseGame = false;
+
 		for (int i = 0; i < MAX_BUTTONS; i++)
 		{
 			Button::Update(buttons[i]);
@@ -122,20 +134,29 @@ namespace MainMenu
 
 		if (buttons[Play].clicked)
 		{
+			PlaySound(buttonSound);
 			CosmicJump::currentScene = CosmicJump::Scenes::Gameplay;
 		}
 
 		if (buttons[Multiplayer].clicked)
 		{
+			PlaySound(buttonSound);
 			CosmicJump::currentScene = CosmicJump::Scenes::Multiplayer;
 		}
 
 		if (buttons[Credits].clicked)
 		{
+			PlaySound(buttonSound);
 			CosmicJump::currentScene = CosmicJump::Scenes::Credits;
 		}
 
 		if (buttons[Exit].clicked)
+		{
+			PlaySound(buttonSound);
+			CloseGame = true;
+		}
+
+		if (CloseGame && !IsSoundPlaying(buttonSound))
 		{
 			CosmicJump::isRunning = false;
 		}
