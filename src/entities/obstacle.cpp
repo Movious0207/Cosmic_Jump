@@ -40,14 +40,18 @@ namespace Obstacle
 		int obstacleBottomWidth = static_cast<int>(obstacle.rectangleBottom.width);
 		int obstacleBottomHeight = static_cast<int>(obstacle.rectangleBottom.height);
 
+
+		DrawRectangle(obstacleTopX, obstacleTopY, obstacleTopWidth, obstacleTopHeight, RED);
+		DrawRectangle(obstacleBottomX, obstacleBottomY, obstacleBottomWidth, obstacleBottomHeight, RED);
+
+		#ifdef _DEBUG
 		int obstacleMidX = static_cast<int>(obstacle.rectangleMid.x);
 		int obstacleMidY = static_cast<int>(obstacle.rectangleMid.y);
 		int obstacleMidWidth = static_cast<int>(obstacle.rectangleMid.width);
 		int obstacleMidHeight = static_cast<int>(obstacle.rectangleMid.height);
 
-		DrawRectangle(obstacleTopX, obstacleTopY, obstacleTopWidth, obstacleTopHeight, RED);
-		DrawRectangle(obstacleBottomX, obstacleBottomY, obstacleBottomWidth, obstacleBottomHeight, RED);
 		DrawRectangleLines(obstacleMidX, obstacleMidY, obstacleMidWidth, obstacleMidHeight, BLACK);
+		#endif
 	}
 
 	Obstacle Create()
