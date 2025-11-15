@@ -142,18 +142,21 @@ namespace MainMenu
 
 		if (buttons[Play].clicked)
 		{
+			StopMusicStream(menuMusic);
 			PlaySound(buttonSound);
 			CosmicJump::currentScene = CosmicJump::Scenes::Gameplay;
 		}
 
 		if (buttons[Multiplayer].clicked)
 		{
+			StopMusicStream(menuMusic);
 			PlaySound(buttonSound);
 			CosmicJump::currentScene = CosmicJump::Scenes::Multiplayer;
 		}
 
 		if (buttons[Credits].clicked)
 		{
+			StopMusicStream(menuMusic);
 			PlaySound(buttonSound);
 			CosmicJump::currentScene = CosmicJump::Scenes::Credits;
 		}

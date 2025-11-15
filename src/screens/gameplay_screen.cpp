@@ -29,6 +29,7 @@ namespace Gameplay
 	static Sound scoreSound;
 	static Sound hitSound;
 	static Sound fallingSound;
+	static Music gameMusic;
 
 	static const float BUTTON_WIDTH = 60.0f;
 	static const float BUTTON_HEIGHT = 60.0f;
@@ -80,6 +81,8 @@ namespace Gameplay
 	{
 		if (IsKeyPressed(KEY_ESCAPE))
 		{
+			StopMusicStream(gameMusic);
+
 			CosmicJump::currentScene = CosmicJump::Scenes::MainMenu;
 
 			isGameStarted = false;
@@ -118,6 +121,11 @@ namespace Gameplay
 
 	void Update()
 	{
+		if (!IsMusicStreamPlaying(gameMusic))
+		{
+			PlayMusicStream(gameMusic);
+		}
+		UpdateMusicStream(gameMusic);
 
 		deltaTime = GetFrameTime();
 
@@ -196,6 +204,7 @@ namespace Gameplay
 		scoreSound = LoadSound("res/sounds/Score.wav");
 		hitSound = LoadSound("res/sounds/Hit.mp3");
 		fallingSound = LoadSound("res/sounds/Falling.wav");
+		gameMusic = LoadMusicStream("res/music/Game.mp3");
 	}
 
 	static void UpdateButton()
@@ -204,6 +213,7 @@ namespace Gameplay
 
 		if (button.clicked)
 		{
+			StopMusicStream(gameMusic);
 			CosmicJump::currentScene = CosmicJump::Scenes::MainMenu;
 			isGameStarted = false;
 		}
@@ -331,7 +341,7 @@ namespace Gameplay
 			PlaySound(fallingSound);
 			player.isActive = false;
 		}
-		if (player2.rectangle.y + player2.rectangle.height >= SCREEN_HEIGHT && player.isActive)
+		if (player2.rectangle.y + player2.rectangle.height >= SCREEN_HEIGHT && player2.isActive)
 		{
 			PlaySound(fallingSound);
 			player2.isActive = false;
