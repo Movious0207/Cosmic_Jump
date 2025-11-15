@@ -17,6 +17,7 @@ namespace MainMenu
 	static Geometry::Rectangle logo;
 
 	static Sound buttonSound;
+	static Music menuMusic;
 
 	static const int MAX_BUTTONS = 4;
 	static Button::Button buttons[MAX_BUTTONS];
@@ -53,6 +54,11 @@ namespace MainMenu
 
 	void Update()
 	{
+		if(!IsMusicStreamPlaying(menuMusic))
+		{
+			PlayMusicStream(menuMusic);
+		}
+		UpdateMusicStream(menuMusic);
 		UpdateButtons();
 	}
 
@@ -71,6 +77,7 @@ namespace MainMenu
 	void Close()
 	{
 		UnloadSound(buttonSound);
+		UnloadMusicStream(menuMusic);
 	}
 
 	static void InitLogo()
@@ -103,6 +110,7 @@ namespace MainMenu
 	static void InitAudio()
 	{
 		buttonSound = LoadSound("res/sounds/buttonClick.mp3");
+		menuMusic = LoadMusicStream("res/music/Menu.mp3");
 	}
 
 	static void DrawLogo()

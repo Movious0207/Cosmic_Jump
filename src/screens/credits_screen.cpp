@@ -26,15 +26,19 @@ namespace Credits
 	static Button::Button button;
 	static const std::string buttonName = "Back";
 
+	static Sound buttonSound;
+
 	static const int BUTTON_MARGIN_BOTTOM = 10;
 
 	static void DrawInfo();
 	static void InitButton();
+	static void InitAudio();
 	static void UpdateButton();
 	static void DrawButton();
 
 	void Init()
 	{
+		InitAudio();
 		InitButton();
 	}
 
@@ -64,7 +68,7 @@ namespace Credits
 
 	void Close()
 	{
-
+		UnloadSound(buttonSound);
 	}
 
 	static void DrawInfo()
@@ -91,12 +95,18 @@ namespace Credits
 		button = Button::Create(x, y, BUTTON_WIDTH, BUTTON_HEIGHT, buttonName);
 	}
 
+	static void InitAudio()
+	{
+		buttonSound = LoadSound("res/sounds/buttonClick.mp3");
+	}
+
 	static void UpdateButton()
 	{
 		Button::Update(button);
 
 		if (button.clicked)
 		{
+			PlaySound(buttonSound);
 			CosmicJump::currentScene = CosmicJump::Scenes::MainMenu;
 		}
 	}
