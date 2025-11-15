@@ -152,25 +152,16 @@ namespace Gameplay
 
 		Background::Draw();
 
-		if (player.isActive)
-		{
-			Player::Draw(player);
-		}
-		if (player2.isActive && CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
-		{
-			Player::Draw(player2);
-		}
+
+		Player::Draw(player,player2);
+
 
 		Obstacle::Draw(obstacle);
 
 		if (!isGameStarted)
 		{
-			Player::Draw(player);
-
-			if (CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
-			{
-				Player::Draw(player2);
-			}
+			Reset();
+			Player::Draw(player,player2);
 
 			DrawTutorial();
 		}

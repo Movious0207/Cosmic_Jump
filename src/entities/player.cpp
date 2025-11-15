@@ -27,14 +27,27 @@ namespace Player
 		LimitWithBorders(player);
 	}
 
-	void Draw(Player player)
+	void Draw(Player player,Player player2)
 	{
-		int x = static_cast<int>(player.rectangle.x);
-		int y = static_cast<int>(player.rectangle.y);
-		int width = static_cast<int>(player.rectangle.width);
-		int height = static_cast<int>(player.rectangle.height);
+		if (player.isActive)
+		{
+			int x = static_cast<int>(player.rectangle.x);
+			int y = static_cast<int>(player.rectangle.y);
+			int width = static_cast<int>(player.rectangle.width);
+			int height = static_cast<int>(player.rectangle.height);
 
-		DrawRectangle(x, y, width, height, GREEN);
+			DrawRectangle(x, y, width, height, GREEN);
+		}
+
+		if (player2.isActive)
+		{
+			int x = static_cast<int>(player2.rectangle.x);
+			int y = static_cast<int>(player2.rectangle.y);
+			int width = static_cast<int>(player2.rectangle.width);
+			int height = static_cast<int>(player2.rectangle.height);
+
+			DrawRectangle(x, y, width, height, RED);
+		}
 	}
 
 	Player Create()
