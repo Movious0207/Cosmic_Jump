@@ -6,7 +6,7 @@ namespace Audio
 	void Init()
 	{
 		InitAudioDevice();
-		SetMasterVolume(100.0f);
+		SetMasterVolume(0.1f);
 	}
 	void Close()
 	{

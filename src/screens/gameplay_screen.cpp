@@ -425,10 +425,13 @@ namespace Gameplay
 		{
 			player.respawning = true;
 		}
-		if (!player.isActive&& respawnTimer < 0)
+		if (!player.isActive && respawnTimer < 0)
 		{
-			player.respawning = false;
-			Player::Reset(player);
+			if (player.rectangle.x - 10 > obstacle.rectangleMid.x + obstacle.rectangleMid.width)
+			{
+				player.respawning = false;
+				Player::Reset(player);
+			}
 		}
 		if (!player2.isActive && respawnTimer < 1)
 		{
@@ -436,8 +439,11 @@ namespace Gameplay
 		}
 		if (!player2.isActive && respawnTimer < 0)
 		{
-			player2.respawning = false;
-			Player::Reset(player2);
+			if (player2.rectangle.x - 10 > obstacle.rectangleMid.x + obstacle.rectangleMid.width)
+			{
+				player2.respawning = false;
+				Player::Reset(player2);
+			}
 		}
 	}
 
