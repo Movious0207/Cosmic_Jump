@@ -24,6 +24,10 @@ namespace Credits
 	static const std::string MUSICAUTHOR = "Menu Music by freesound_community from Pixabay";
 	static const std::string MUSICAUTHOR2 = "Game Music by freesound_community from Pixabay";
 
+	static const std::string ARTLABEL = "Art:";
+	static const std::string ARTAUTHOR = "BackGround by Jonas Canaza";
+	static const std::string ARTAUTHOR2 = "Players and obstacles by Facundo Arrastua";
+
 	static const int FONT_SIZE_TITLE = 64;
 	static const int FONT_SIZE_TEXT = 32;
 
@@ -102,15 +106,27 @@ namespace Credits
 		int musicAuthorX = SCREEN_WIDTH  / 2 + SCREEN_WIDTH / 12;
 		int musicAuthorY = musicLabelY + LINE_SPACING;
 
+		int artLabelX = (SCREEN_WIDTH - MeasureText(LABEL.c_str(), FONT_SIZE_TEXT)) / 2;
+		int artLabelY = static_cast<int>(SCREEN_HEIGHT * 0.6f);
+
+		int artAuthorX = (SCREEN_WIDTH - MeasureText(AUTHOR.c_str(), FONT_SIZE_TEXT)) / 2;
+		int artAuthorY = artLabelY + LINE_SPACING;
+
 		DrawText(TITLE.c_str(), titleX, titleY, FONT_SIZE_TITLE, WHITE);
 		DrawText(LABEL.c_str(), creditsLabelX, creditsLabelY, FONT_SIZE_TEXT, WHITE);
 		DrawText(AUTHOR.c_str(), authorX, authorY, FONT_SIZE_TEXT, WHITE);
+
 		DrawText(SFXLABEL.c_str(), sfxLabelX, sfxLabelY, FONT_SIZE_TEXT, WHITE);
 		DrawText(SFXAUTHOR.c_str(), sfxAuthorX, sfxAuthorY, 20, WHITE);
 		DrawText(SFXAUTHOR2.c_str(), sfxAuthorX, sfxAuthorY + LINE_SPACING, 20, WHITE);
+
 		DrawText(MUSICLABEL.c_str(), musicLabelX, musicLabelY, FONT_SIZE_TEXT, WHITE);
 		DrawText(MUSICAUTHOR.c_str(), musicAuthorX, musicAuthorY, 20, WHITE);
 		DrawText(MUSICAUTHOR2.c_str(), musicAuthorX, musicAuthorY + LINE_SPACING, 20, WHITE);
+
+		DrawText(ARTLABEL.c_str(), artLabelX, artLabelY, FONT_SIZE_TEXT, WHITE);
+		DrawText(ARTAUTHOR.c_str(), artAuthorX, artAuthorY, 20, WHITE);
+		DrawText(ARTAUTHOR2.c_str(), artAuthorX, artAuthorY + LINE_SPACING, 20, WHITE);
 	}
 
 	static void InitButton()
