@@ -31,6 +31,10 @@ namespace Gameplay
 	static Sound fallingSound;
 	static Music gameMusic;
 
+	static Texture2D obstacleTexture;
+	static Texture2D p1Texture;
+	static Texture2D p2Texture;
+
 	static const float BUTTON_WIDTH = 60.0f;
 	static const float BUTTON_HEIGHT = 60.0f;
 	static const float BUTTON_MARGIN = 10.0f;
@@ -52,6 +56,7 @@ namespace Gameplay
 
 	static void InitButton();
 	static void InitAudio();
+	static void InitTextures();
 	static void UpdateButton();
 	static void DrawButton();
 	static void DrawTutorial();
@@ -67,16 +72,16 @@ namespace Gameplay
 	{
 		static const float DEFAULT_X = 200.0f;
 
+		InitTextures();
+		InitAudio();
+		InitButton();
+
 		player = Player::Create();
 		player2 = Player::Create();
 		obstacle = Obstacle::Create();
 
 		player.rectangle.x = DEFAULT_X - 50.0f;
 		player2.rectangle.x = DEFAULT_X + 50.0f;
-
-
-		InitAudio();
-		InitButton();
 
 		deltaTime = GetFrameTime();
 		isGameStarted = false;
@@ -180,7 +185,7 @@ namespace Gameplay
 		Background::Draw();
 
 
-		Player::Draw(player,player2);
+		Player::Draw(player,player2,p1Texture,p2Texture);
 
 
 		Obstacle::Draw(obstacle);
@@ -189,7 +194,7 @@ namespace Gameplay
 		{
 			Reset();
 
-			Player::Draw(player,player2);
+			Player::Draw(player,player2, p1Texture, p2Texture);
 
 			DrawTutorial();
 		}
@@ -231,6 +236,13 @@ namespace Gameplay
 		hitSound = LoadSound("res/sounds/Hit.mp3");
 		fallingSound = LoadSound("res/sounds/Falling.wav");
 		gameMusic = LoadMusicStream("res/music/Game.mp3");
+	}
+
+	static void InitTextures()
+	{
+		obstacleTexture = LoadTexture("res/textures/gameplay/obstacle.png");
+		p1Texture = LoadTexture("res/textures/gameplay/player1.png");
+		p2Texture = LoadTexture("res/textures/gameplay/player2.png");
 	}
 
 	static void UpdateButton()
