@@ -25,8 +25,7 @@ namespace Credits
 	static const std::string MUSICAUTHOR2 = "Game Music by freesound_community from Pixabay";
 
 	static const std::string ARTLABEL = "Art:";
-	static const std::string ARTAUTHOR = "BackGround by Jonas Canaza";
-	static const std::string ARTAUTHOR2 = "Players and obstacles by Facundo Arrastua";
+	static const std::string ARTAUTHOR = "All by Facundo Arrastua";
 
 	static const int FONT_SIZE_TITLE = 64;
 	static const int FONT_SIZE_TEXT = 32;
@@ -109,7 +108,7 @@ namespace Credits
 		int artLabelX = (SCREEN_WIDTH - MeasureText(LABEL.c_str(), FONT_SIZE_TEXT)) / 2;
 		int artLabelY = static_cast<int>(SCREEN_HEIGHT * 0.6f);
 
-		int artAuthorX = (SCREEN_WIDTH - MeasureText(AUTHOR.c_str(), FONT_SIZE_TEXT)) / 2;
+		int artAuthorX = ((SCREEN_WIDTH - MeasureText(AUTHOR.c_str(), FONT_SIZE_TEXT)) / 2) + SCREEN_WIDTH / 10;
 		int artAuthorY = artLabelY + LINE_SPACING;
 
 		DrawText(TITLE.c_str(), titleX, titleY, FONT_SIZE_TITLE, WHITE);
@@ -126,7 +125,6 @@ namespace Credits
 
 		DrawText(ARTLABEL.c_str(), artLabelX, artLabelY, FONT_SIZE_TEXT, WHITE);
 		DrawText(ARTAUTHOR.c_str(), artAuthorX, artAuthorY, 20, WHITE);
-		DrawText(ARTAUTHOR2.c_str(), artAuthorX, artAuthorY + LINE_SPACING, 20, WHITE);
 	}
 
 	static void InitButton()

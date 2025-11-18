@@ -1,5 +1,7 @@
 #pragma once
 
+#include "raylib.h"
+
 #include "geometry/rectangle.h"
 
 namespace Obstacle
@@ -14,7 +16,7 @@ namespace Obstacle
 	};
 
 	void Update(Obstacle& obstacle, float deltaTime);
-	void Draw(Obstacle obstacle);
+	void Draw(Obstacle obstacle,Texture2D texture);
 
 	Obstacle Create();
 	void Reset(Obstacle& obstacle);

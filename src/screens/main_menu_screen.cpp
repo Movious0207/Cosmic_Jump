@@ -18,6 +18,8 @@ namespace MainMenu
 
 	static Sound buttonSound;
 	static Music menuMusic;
+	static Texture2D logoTexture;
+	static Texture2D background;
 
 	static const int MAX_BUTTONS = 4;
 	static Button::Button buttons[MAX_BUTTONS];
@@ -42,6 +44,8 @@ namespace MainMenu
 
 	void Init()
 	{
+		logoTexture = LoadTexture("res/textures/logo.png");
+		background = LoadTexture("res/textures/backgrounds/gameplay/back.png");
 		InitLogo();
 		InitButtons();
 		InitAudio();
@@ -64,7 +68,7 @@ namespace MainMenu
 
 	void Draw()
 	{
-		ClearBackground(BLACK);
+		DrawTexturePro(background, { 0,0,1919,1080 }, { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT }, { 0,0 }, 0, WHITE);
 		BeginDrawing();
 
 		DrawLogo();
@@ -76,6 +80,7 @@ namespace MainMenu
 
 	void Close()
 	{
+		UnloadTexture(logoTexture);
 		UnloadSound(buttonSound);
 		UnloadMusicStream(menuMusic);
 	}
@@ -83,7 +88,7 @@ namespace MainMenu
 	static void InitLogo()
 	{
 		float totalMenuHeight = GetTotalMenuHeight();
-		float logoStartY = (SCREEN_HEIGHT - totalMenuHeight) / 2.0f;
+		float logoStartY = (SCREEN_HEIGHT - totalMenuHeight) / 2.2f;
 
 		logo.x = static_cast<float>(SCREEN_WIDTH) / 2.0f - LOGO_WIDTH / 2.0f;
 		logo.y = logoStartY;
@@ -115,12 +120,7 @@ namespace MainMenu
 
 	static void DrawLogo()
 	{
-		int x = static_cast<int>(logo.x);
-		int y = static_cast<int>(logo.y);
-		int width = static_cast<int>(logo.width);
-		int height = static_cast<int>(logo.height);
-
-		DrawRectangle(x, y, width, height, WHITE);
+		DrawTexturePro(logoTexture, { 0,0,1760,1214 }, {logo.x,logo.y,logo.width,logo.height} , {0,0}, 0, WHITE);
 	}
 
 	static void DrawButtons()

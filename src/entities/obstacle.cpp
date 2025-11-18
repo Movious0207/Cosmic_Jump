@@ -1,7 +1,5 @@
 #include "obstacle.h"
 
-#include "raylib.h"
-
 #include "game/game_constants.h"
 #include "utilities/math_utils.h"
 
@@ -28,21 +26,21 @@ namespace Obstacle
 		Recycle(obstacle);
 	}
 
-	void Draw(Obstacle obstacle)
+	void Draw(Obstacle obstacle, Texture2D texture)
 	{
-		int obstacleTopX = static_cast<int>(obstacle.rectangleTop.x);
-		int obstacleTopY = static_cast<int>(obstacle.rectangleTop.y);
-		int obstacleTopWidth = static_cast<int>(obstacle.rectangleTop.width);
-		int obstacleTopHeight = static_cast<int>(obstacle.rectangleTop.height);
+		float obstacleTopX = obstacle.rectangleTop.x;
+		float obstacleTopY = obstacle.rectangleTop.y;
+		float obstacleTopWidth = obstacle.rectangleTop.width + 10.0f;
+		float obstacleTopHeight = obstacle.rectangleTop.height;
 
-		int obstacleBottomX = static_cast<int>(obstacle.rectangleBottom.x);
-		int obstacleBottomY = static_cast<int>(obstacle.rectangleBottom.y);
-		int obstacleBottomWidth = static_cast<int>(obstacle.rectangleBottom.width);
-		int obstacleBottomHeight = static_cast<int>(obstacle.rectangleBottom.height);
+		float obstacleBottomX = obstacle.rectangleBottom.x;
+		float obstacleBottomY = obstacle.rectangleBottom.y;
+		float obstacleBottomWidth = obstacle.rectangleBottom.width + 10.0f;
+		float obstacleBottomHeight = obstacle.rectangleBottom.height;
 
 
-		DrawRectangle(obstacleTopX, obstacleTopY, obstacleTopWidth, obstacleTopHeight, RED);
-		DrawRectangle(obstacleBottomX, obstacleBottomY, obstacleBottomWidth, obstacleBottomHeight, RED);
+		DrawTexturePro(texture, { 0, 0 , 511, 1396 }, { obstacleTopX,obstacleTopY , obstacleTopWidth, obstacleTopHeight }, {0,0} , 0, WHITE);
+		DrawTexturePro(texture, { 0, 0, 511, 1396 }, { obstacleBottomX, obstacleBottomY, obstacleBottomWidth, obstacleBottomHeight}, {0, 0}, 0, WHITE);
 
 		#ifdef _DEBUG
 		int obstacleMidX = static_cast<int>(obstacle.rectangleMid.x);

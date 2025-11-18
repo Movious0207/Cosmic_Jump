@@ -188,7 +188,7 @@ namespace Gameplay
 		Player::Draw(player,player2,p1Texture,p2Texture);
 
 
-		Obstacle::Draw(obstacle);
+		Obstacle::Draw(obstacle, obstacleTexture);
 
 		if (!isGameStarted && !isGameOver)
 		{
@@ -219,6 +219,10 @@ namespace Gameplay
 		UnloadSound(scoreSound);
 		UnloadSound(hitSound);
 		UnloadSound(fallingSound);
+
+		UnloadTexture(p1Texture);
+		UnloadTexture(p2Texture);
+		UnloadTexture(obstacleTexture);
 	}
 
 	static void InitButton()
@@ -304,23 +308,23 @@ namespace Gameplay
 
 	static void DrawGameEnd()
 	{
-		int textGameOverWidth = 0;
-
-
-		textGameOverWidth = MeasureText("GAME OVER!", TUTORIAL_FONT_SIZE);
-
+		int textGameOverWidth = MeasureText("GAME OVER!", TUTORIAL_FONT_SIZE);
 
 		int textScoreWidth = MeasureText(std::to_string(score).c_str(), TUTORIAL_FONT_SIZE);
 		textScoreWidth += MeasureText("Final Score: ", TUTORIAL_FONT_SIZE);
 
+		int textRestartWidth = MeasureText("Press SPACE to Restart", TUTORIAL_FONT_SIZE);
+
 		int textGameOverX = (SCREEN_WIDTH - textGameOverWidth) / 2;
 		int textScoreX = (SCREEN_WIDTH - textScoreWidth) / 2;
+		int textRestartX = (SCREEN_WIDTH - textRestartWidth) / 2;
 
 		int totalBlockHeight = TUTORIAL_FONT_SIZE + TUTORIAL_TEXT_SPACING + TUTORIAL_FONT_SIZE;
 		int blockTopY = (SCREEN_HEIGHT - totalBlockHeight) / 2;
 
 		int textGameOverY = blockTopY;
 		int textScoreY = textGameOverY + TUTORIAL_FONT_SIZE + TUTORIAL_TEXT_SPACING;
+		int textRestartY = textScoreY + TUTORIAL_FONT_SIZE + TUTORIAL_TEXT_SPACING;
 
 		DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, TUTORIAL_BACKGROUND);
 
@@ -333,6 +337,9 @@ namespace Gameplay
 		textScoreX = (SCREEN_WIDTH + textScoreWidth) / 2;
 
 		DrawText(std::to_string(score).c_str(), textScoreX, textScoreY, TUTORIAL_FONT_SIZE, WHITE);
+
+		DrawText("Press SPACE to restart", textRestartX, textRestartY, TUTORIAL_FONT_SIZE, WHITE);
+
 	}
 
 	static void DrawScore()
