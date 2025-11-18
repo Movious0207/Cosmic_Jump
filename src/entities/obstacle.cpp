@@ -66,6 +66,7 @@ namespace Obstacle
 	void Reset(Obstacle& obstacle)
 	{
 		RandomizeVerticalPosition(obstacle);
+		obstacle.speedX = SPEED_X;
 	}
 
 	static void Move(Obstacle& obstacle, float deltaTime)

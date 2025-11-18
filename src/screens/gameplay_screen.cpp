@@ -1,6 +1,7 @@
 #include "screens/gameplay_screen.h"
 
 #include <string>
+#include <cmath>
 #include "raylib.h"
 
 #include "game/game.h"
@@ -168,6 +169,9 @@ namespace Gameplay
 			}
 
 			Obstacle::Update(obstacle, deltaTime);
+
+
+			obstacle.speedX = std::min(obstacle.speedX + 20.0f * deltaTime,1500.0f);
 
 			HandleCollisionBetweenPlayerAndObstacle();
 			HandlePlayerFloorCollision();
