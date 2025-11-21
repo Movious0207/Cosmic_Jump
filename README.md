@@ -12,7 +12,7 @@ It also counts with a cooperative multiplayer mode which you can play with a fri
 
 ## Controls
 
-You navigate the screens using the **Mouse** or you can also press **Escape** to go back to the main menu
+You navigate the screens using the **Mouse** or you can also press **Escape** to go back to the main menu or pause the game
 
 #### Player 1
 
