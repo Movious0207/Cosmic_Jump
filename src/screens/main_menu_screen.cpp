@@ -23,6 +23,7 @@ namespace MainMenu
 
 	static const int MAX_BUTTONS = 4;
 	static Button::Button buttons[MAX_BUTTONS];
+	static Button::Button muteButton;
 	static const std::string buttonNames[MAX_BUTTONS] = { "Play", "Multiplayer" ,"Credits", "Exit"};
 
 	enum ButtonID
@@ -110,6 +111,7 @@ namespace MainMenu
 
 			buttons[i] = Button::Create(buttonX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, buttonNames[i]);
 		}
+		muteButton = Button::Create(SCREEN_WIDTH * 0.9f, SCREEN_HEIGHT * 0.1f, 100, 100, "Mute");
 	}
 
 	static void InitAudio()
@@ -129,6 +131,7 @@ namespace MainMenu
 		{
 			Button::Draw(buttons[i]);
 		}
+		Button::Draw(muteButton);
 	}
 
 	static void UpdateButtons()
@@ -139,6 +142,7 @@ namespace MainMenu
 		{
 			Button::Update(buttons[i]);
 		}
+		Button::Update(muteButton);
 
 		if (buttons[Play].clicked)
 		{
@@ -165,6 +169,21 @@ namespace MainMenu
 		{
 			PlaySound(buttonSound);
 			CloseGame = true;
+		}
+
+		if (muteButton.clicked)
+		{
+			PlaySound(buttonSound);
+			if (GetMasterVolume() > 0.0f)
+			{
+				muteButton.text = "unmute";
+				SetMasterVolume(0.0f);
+			}
+			else
+			{
+				muteButton.text = "mute";
+				SetMasterVolume(0.1f);
+			}
 		}
 
 		if (CloseGame && !IsSoundPlaying(buttonSound))

@@ -24,7 +24,7 @@ namespace Gameplay
 	static Obstacle::Obstacle obstacle;
 
 	static Button::Button button;
-	static const std::string buttonName = " | | ";
+	static const std::string buttonName = " Back ";
 
 	static Sound jumpSound;
 	static Sound scoreSound;

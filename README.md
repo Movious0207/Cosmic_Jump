@@ -2,30 +2,35 @@
 
 ### Developed by: Jonas Canaza and Lucas Galli
 
+![Logo of the game.](res/textures/logo.png)
+
 **Cosmic Jump** is an arcade game based on the famous mobile game flappy bird.
 
 You control a spaceship and you have to go through as much asteroid belts as possible, But be careful! the longer you can survive the faster the asteroids will become! 
+
 It also counts with a cooperative multiplayer mode which you can play with a friend using the same computer! if one of you is still standing the other one can come back after hitting an obstacle, so try and get as many points as possible either by yourself or with a friend and enjoy this casual arcade game.
 
-### Controls
+## Controls
 
 You navigate the screens using the **Mouse** or you can also press **Escape** to go back to the main menu
 
 #### Player 1
 
-##### PRESS SPACE TO JUMP
+#### PRESS SPACE TO JUMP
 
 #### Player 2
 
-##### PRESS THE UP BUTTON TO JUMP
+#### PRESS THE UP BUTTON TO JUMP
 
-### Features
-
+## Features
+```
 **confortable movement**
-**difficulty curve**
-**cooperative multiplayer**
 
-### Credits
+**difficulty curve**
+
+**cooperative multiplayer**
+```
+## Credits
 
 #### Ui-Sound FX
 
