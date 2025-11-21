@@ -23,8 +23,10 @@ namespace Gameplay
 
 	static Obstacle::Obstacle obstacle;
 
-	static Button::Button button;
-	static const std::string buttonName = " Back ";
+	static Button::Button pauseButton;
+	static Button::Button resumeButton;
+	static Button::Button menuButton;
+	static const std::string buttonName = " | | ";
 
 	static Sound jumpSound;
 	static Sound scoreSound;
@@ -52,6 +54,7 @@ namespace Gameplay
 	static float deltaTime;
 	static bool isGameStarted;
 	static bool isGameOver;
+	static bool isPaused;
 	static int score;
 	static float respawnTimer;
 
@@ -62,6 +65,7 @@ namespace Gameplay
 	static void DrawButton();
 	static void DrawTutorial();
 	static void DrawGameEnd();
+	static void DrawPause();
 	static void DrawScore();
 	static void HandleCollisionBetweenPlayerAndObstacle();
 	static void HandlePlayerFloorCollision();
@@ -92,90 +96,99 @@ namespace Gameplay
 	{
 		if (IsKeyPressed(KEY_ESCAPE))
 		{
-			StopMusicStream(gameMusic);
-
-			CosmicJump::currentScene = CosmicJump::Scenes::MainMenu;
-
-			isGameStarted = false;
-			isGameOver = false;
+			if (isPaused)
+			{
+				isPaused = false;
+			}
+			else
+			{
+				PauseMusicStream(gameMusic);
+				isPaused = true;
+			}
 		}
 
-		if (player.isActive)
+		if (!isPaused)
 		{
-			if (IsKeyPressed(KEY_SPACE) && isGameStarted)
+			if (player.isActive)
 			{
+				if (IsKeyPressed(KEY_SPACE) && isGameStarted)
+				{
+					Player::Jump(player);
+					PlaySound(jumpSound);
+				}
+			}
+
+			if (player2.isActive)
+			{
+				if (IsKeyPressed(KEY_UP) && isGameStarted)
+				{
+					Player::Jump(player2);
+					PlaySound(jumpSound);
+				}
+			}
+
+			if (IsKeyPressed(KEY_SPACE) && !isGameStarted && !isGameOver)
+			{
+				isGameStarted = true;
 				Player::Jump(player);
+
+				if (CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
+				{
+					Player::Jump(player2);
+				}
 				PlaySound(jumpSound);
 			}
-		}
-
-		if (player2.isActive)
-		{
-			if (IsKeyPressed(KEY_UP) && isGameStarted)
+			else if (IsKeyPressed(KEY_SPACE) && !isGameStarted)
 			{
-				Player::Jump(player2);
-				PlaySound(jumpSound);
+				isGameOver = false;
 			}
-		}
-
-		if (IsKeyPressed(KEY_SPACE) && !isGameStarted && !isGameOver)
-		{
-			isGameStarted = true;
-			Player::Jump(player);
-
-			if (CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
-			{
-				Player::Jump(player2);
-			}
-			PlaySound(jumpSound);
-		}
-		else if (IsKeyPressed(KEY_SPACE) && !isGameStarted)
-		{
-			isGameOver = false;
 		}
 	}
 
 	void Update()
 	{
-		if (!IsMusicStreamPlaying(gameMusic))
+		if (!isPaused)
 		{
-			PlayMusicStream(gameMusic);
-		}
-		UpdateMusicStream(gameMusic);
-
-		deltaTime = GetFrameTime();
-
-		if (isGameStarted)
-		{
-			Background::Update(deltaTime);
-
-			if (CosmicJump::currentScene == CosmicJump::Scenes::Gameplay)
+			if (!IsMusicStreamPlaying(gameMusic))
 			{
-				Player::Update(player, deltaTime);
+				PlayMusicStream(gameMusic);
 			}
-			else if (CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
+			UpdateMusicStream(gameMusic);
+
+			deltaTime = GetFrameTime();
+
+			if (isGameStarted)
 			{
-				Player::Update(player, deltaTime);
-				Player::Update(player2, deltaTime);
+				Background::Update(deltaTime);
 
-				if (!player.isActive && player2.isActive)
+				if (CosmicJump::currentScene == CosmicJump::Scenes::Gameplay)
 				{
-					PlayerRespawn();
+					Player::Update(player, deltaTime);
 				}
-				else if (player.isActive && !player2.isActive)
+				else if (CosmicJump::currentScene == CosmicJump::Scenes::Multiplayer)
 				{
-					PlayerRespawn();
+					Player::Update(player, deltaTime);
+					Player::Update(player2, deltaTime);
+
+					if (!player.isActive && player2.isActive)
+					{
+						PlayerRespawn();
+					}
+					else if (player.isActive && !player2.isActive)
+					{
+						PlayerRespawn();
+					}
 				}
+
+				Obstacle::Update(obstacle, deltaTime);
+
+
+				obstacle.speedX = std::min(obstacle.speedX + 20.0f * deltaTime, 1500.0f);
+
+				HandleCollisionBetweenPlayerAndObstacle();
+				HandlePlayerFloorCollision();
+				PlayerScoreCheck();
 			}
-
-			Obstacle::Update(obstacle, deltaTime);
-
-
-			obstacle.speedX = std::min(obstacle.speedX + 20.0f * deltaTime,1500.0f);
-
-			HandleCollisionBetweenPlayerAndObstacle();
-			HandlePlayerFloorCollision();
-			PlayerScoreCheck();
 		}
 
 		UpdateButton();
@@ -212,6 +225,11 @@ namespace Gameplay
 			DrawScore();
 		}
 
+		if (isPaused)
+		{
+			DrawPause();
+		}
+
 		DrawButton();
 
 		EndDrawing();
@@ -234,7 +252,9 @@ namespace Gameplay
 		float x = static_cast<float>(SCREEN_WIDTH) - BUTTON_WIDTH - BUTTON_MARGIN;
 		float y = BUTTON_MARGIN;
 
-		button = Button::Create(x, y, BUTTON_WIDTH, BUTTON_HEIGHT, buttonName);
+		pauseButton = Button::Create(x, y, BUTTON_WIDTH, BUTTON_HEIGHT, buttonName);
+		resumeButton = Button::Create(SCREEN_WIDTH / 2 - 175.0f , SCREEN_HEIGHT / 2, 325.0f, 75.0f, "Resume");
+		menuButton = Button::Create(SCREEN_WIDTH / 2 - 175.0f, (SCREEN_HEIGHT / 2) + 90.0f, 325.0f, 75.0f, "Back to menu");
 	}
 
 	static void InitAudio()
@@ -255,12 +275,39 @@ namespace Gameplay
 
 	static void UpdateButton()
 	{
-		Button::Update(button);
 
-		if (button.clicked)
+		Button::Update(pauseButton);
+
+		if (pauseButton.clicked)
+		{
+			if (isPaused)
+			{
+				isPaused = false;
+			}
+			else
+			{
+				PauseMusicStream(gameMusic);
+				isPaused = true;
+			}
+		}
+		if (isPaused)
+		{
+			Button::Update(resumeButton);
+			Button::Update(menuButton);
+		}
+
+		if (resumeButton.clicked)
+		{
+			ResumeMusicStream(gameMusic);
+			isPaused = false;
+		}
+		if (menuButton.clicked && isPaused)
 		{
 			StopMusicStream(gameMusic);
+
 			CosmicJump::currentScene = CosmicJump::Scenes::MainMenu;
+
+			isPaused = false;
 			isGameStarted = false;
 			isGameOver = false;
 		}
@@ -268,7 +315,15 @@ namespace Gameplay
 
 	static void DrawButton()
 	{
-		Button::Draw(button);
+		if (!isPaused)
+		{
+			Button::Draw(pauseButton);
+		}
+		else
+		{
+			Button::Draw(resumeButton);
+			Button::Draw(menuButton);
+		}
 	}
 
 	static void DrawTutorial()
@@ -344,6 +399,18 @@ namespace Gameplay
 
 		DrawText("Press SPACE to restart", textRestartX, textRestartY, TUTORIAL_FONT_SIZE, WHITE);
 
+	}
+
+	static void DrawPause()
+	{
+		int textPauseWidth = MeasureText("PAUSED", TUTORIAL_FONT_SIZE);
+		int textPauseX = (SCREEN_WIDTH - textPauseWidth) / 2;
+		int totalBlockHeight = TUTORIAL_FONT_SIZE + TUTORIAL_TEXT_SPACING + TUTORIAL_FONT_SIZE;
+		int blockTopY = (SCREEN_HEIGHT - totalBlockHeight) / 2;
+
+		DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, TUTORIAL_BACKGROUND);
+
+		DrawText("PAUSED", textPauseX, blockTopY, TUTORIAL_FONT_SIZE, WHITE);
 	}
 
 	static void DrawScore()

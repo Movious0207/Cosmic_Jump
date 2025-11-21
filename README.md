@@ -30,6 +30,15 @@ You navigate the screens using the **Mouse** or you can also press **Escape** to
 
 **cooperative multiplayer**
 ```
+
+## How to Download
+
+First, download the CosmicJump.zip file, either from the releases page in <a href="https://github.com/Movious0207/Cosmic_Jump/releases">GitHub</a> or in <a href=>itch.io</a>
+
+then, unzip the file and open the .exe
+
+finally, enjoy!
+
 ## Credits
 
 #### Ui-Sound FX
